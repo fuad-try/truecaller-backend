@@ -7,6 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
+// Add a homepage route just to check server status
+app.get('/', (req, res) => {
+  res.send('✅ Truecaller API Backend is running');
+});
+
 app.get('/lookup', async (req, res) => {
   const number = req.query.number;
   if (!number) return res.status(400).json({ error: 'Number is required' });
@@ -23,9 +28,11 @@ app.get('/lookup', async (req, res) => {
         'Authorization': 'Bearer a2i0G--tSTAV5-okDXVrJeZaIlfypP8TqZRY8Dd-MI5UturBJd0ojtWn17fzQGQe'
       }
     });
+
     res.json(response.data);
   } catch (err) {
-    res.status(204).end(); // No content yet
+    console.error('Error fetching from Truecaller:', err.message);
+    res.status(204).send(); // No content
   }
 });
 
